@@ -1,0 +1,107 @@
+openapi: "3.0.0"
+info:
+  title: API de Usuários
+  description: API REST simples em PHP puro com armazenamento em JSON
+  version: "1.0.0"
+
+servers:
+  - url: http://localhost/api_exemplo
+    description: Servidor local
+
+paths:
+  /usuarios:
+    get:
+      summary: Lista todos os usuários
+      responses:
+        "200":
+          description: Lista de usuários
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Usuario"
+
+    post:
+      summary: Cria um novo usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UsuarioInput"
+      responses:
+        "201":
+          description: Usuário criado
+        "422":
+          description: Dados inválidos
+
+  /usuarios/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+
+    get:
+      summary: Busca um usuário por ID
+      responses:
+        "200":
+          description: Usuário encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Usuario"
+        "404":
+          description: Não encontrado
+
+    put:
+      summary: Atualiza um usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UsuarioInput"
+      responses:
+        "200":
+          description: Usuário atualizado
+        "404":
+          description: Não encontrado
+
+    delete:
+      summary: Remove um usuário
+      responses:
+        "200":
+          description: Deletado com sucesso
+        "404":
+          description: Não encontrado
+
+components:
+  schemas:
+    Usuario:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        nome:
+          type: string
+          example: Maria Silva
+        email:
+          type: string
+          example: maria@email.com
+
+    UsuarioInput:
+      type: object
+      required:
+        - nome
+        - email
+      properties:
+        nome:
+          type: string
+          example: Carlos Lima
+        email:
+          type: string
+          example: carlos@email.com
